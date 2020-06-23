@@ -1,4 +1,3 @@
-// prewritten document short cuts
 $(document).ready(function() {
     var options = document.querySelector("#option-list");
     var go = document.querySelector("#go");
@@ -14,7 +13,7 @@ $(document).ready(function() {
         welcomeMessage.style.display = "none"; 
         count =0;
         // starts timer 
-
+        startTimer();
         // randomly shuffles array of questions
         for(var i =0;i<5; i++){
             var selector = Math.floor(Math.random()*masterArray.length)
@@ -23,6 +22,7 @@ $(document).ready(function() {
         }
         console.log(questionArray);
         console.log(masterArray);
+
         createQuestionBoard();
 
     });
@@ -76,10 +76,11 @@ function createQuestionBoard(){
 
 // When the correct answer is selected this function will run to add points to the score and append a message
 function checkAnswer(verify){
-    var verify = parseInt(;
-    if(verify ===1){
-        document.querySelector("#verify").textContent = "Incorrect"; 
+    $("#option-list").empty();
+    if(parseInt(verify) ===1){
+        document.querySelector("#verify").textContent = "Correct"; 
         score+= 5;
+        console.log(score);
         count++;
         if(count!==5){
             createQuestionBoard();
@@ -89,7 +90,8 @@ function checkAnswer(verify){
         }
     }else if(verify !==1){
         document.querySelector("#verify").textContent = "Incorrect"; 
-        score -=5;
+        score += (-5);
+        console.log(score);
         count++;
         if(count!==5){
             createQuestionBoard();
@@ -98,16 +100,45 @@ function checkAnswer(verify){
             endGame()
         }
     }
-    $("#options-list").empty();
 }
 
 function endGame(){
+    // clears the questionArray so it can be reshuffled when the game is reset
+    // Refills master Array
     masterArray = questionArray;
     questionArray = [];
+    clearInterval(interval);
+    // calculates final score which is the score from the questions plus the time remaining
+    finalScore= (score +totalSeconds);
+    console.log(finalScore);
+    score = 0;
+    title.textContent = "All Done!";
+
+    $("#option-list").empty();
+}
+
+
+function startTimer(){
+    totalSeconds = 60;
+    $("#time-slot").text(totalSeconds);
+    interval = setInterval(ourTimer,1000);
+}
+
+function ourTimer(){
+    totalSeconds--;
+    $("#time-slot").text(totalSeconds);
+    if(totalSeconds===0){
+        endGame();
+        alert("Times up!");
+    }
+
 }
 
 
 // GLOBAL VARIABLES
+
+
+// Each question is an object consisting of the question (which is a string), an array of promopts, and an integer correct which corresponds to the index of the correct answer
 var masterArray = [
     {prompt: "Bootstrap is a _ which you can link to your HTML file to help style your page.", answers: ["CDN", "Language","Event listener"], index:1},
     {prompt: "Local storage, geo location, and platform, are all elements that you can find by accessing the browser's __", answers: ["body", "cookies", "window/ DOM"], index:2},
@@ -115,7 +146,8 @@ var masterArray = [
     {prompt: "The 'trinity' of clientside coding is considered to be HTML, CSS and ___", answers: ["Javascript", "Bootstrap", "Jquery"], index:0},
     {prompt: "To print values out into the console of a page, you use the Javascript command __", answers:["return", "console.value()", "console.log()"], index:2}
     ]
-    // The randomly shuffled array will be stored in this index
+
+// The randomly shuffled array will be stored in this index
 var questionArray =[];
 var score =0;
 var count;
@@ -127,5 +159,18 @@ var MessageText = "Welcome to the coding quiz challenge! When you click the butt
 "have been answered, the remaining time left on the quiz will be added to your score and that will be the final score. Good Luck!"
 // this will be the variable that holds the players score at the end of the game.
 var score =0;
+var finalScore =0;
+
+// Keeps track of which question they are on 
 var count;
-// Each question is an object consisting of the question (which is a string), an array of promopts, and an integer correct which corresponds to the index of the correct answer
+
+// used for timer function
+var totalSeconds;
+var interval;
+
+// prewritten document short cuts
+var options = document.querySelector("#option-list");
+var go = document.querySelector("#go");
+var welcomeMessage = document.querySelector("#prompt");
+var title = document.querySelector("#title");
+var timerSlot = document.querySelector("#timee-slot");

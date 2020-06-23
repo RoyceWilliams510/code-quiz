@@ -1,16 +1,11 @@
 $(document).ready(function() {
-    var options = document.querySelector("#option-list");
-    var go = document.querySelector("#go");
-    var welcomeMessage = document.querySelector("#prompt");
-    var title = document.querySelector("#title");
-    
     // When the start button is clicked this function runs
     // characteristics of this function is it initiates the timer in the top right corner
     // It hides the Welcome screen
     // Runs the function that generates the display of the questions
     $("#go").on("click",function(){
         $(this).hide();
-        welcomeMessage.style.display = "none"; 
+        welcomeMessage.textContent= "";
         count =0;
         // starts timer 
         startTimer();
@@ -67,9 +62,7 @@ function createQuestionBoard(){
     }
     var br = document.createElement("br");
     $("#option-list").append(ans1);
-    $("#option-list").append(br)
     $("#option-list").append(ans2);
-    $("#option-list").append(br)
     $("#option-list").append(ans3);
     
 }
@@ -113,8 +106,22 @@ function endGame(){
     console.log(finalScore);
     score = 0;
     title.textContent = "All Done!";
+    if(finalScore >=50){
+        welcomeMessage.textContent = "Wow awesome performance your final score of "+ finalScore +" was quite the performance to watch. To save this record on our leaderboards type in your name and hit submit below."
+    }
+    if(40<=finalScore <50){
+        welcomeMessage.textContent = "Good job! Your final score of "+ finalScore +" puts you at a decent placement. To save this record on our leaderboards type in your name and hit submit below."
+    }
+    if(30<=finalScore<40){
+        welcomeMessage.textContent = "Okay you're getting there, your final score of "+ finalScore +" isn't shameful but you can do better. To save this record on our leaderboards type in your name and hit submit below."
 
+    }
+    if(finalScore<30){
+        welcomeMessage.textContent = "Alright you might aswell try again, your final score of "+ finalScore +" is something that can be improved on. To save this record on our leaderboards type in your name and hit submit below."
+
+    }
     $("#option-list").empty();
+    $("#verify").text("");
 }
 
 

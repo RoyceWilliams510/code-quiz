@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang ="en">
-    
     <head> 
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -8,16 +7,38 @@
         <!-- bootstrap link -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <!-- Own style sheet -->
-        <link rel ="stylesheet" href="/Assets/style.css">
-        <!-- link to javascript file -->
-        <script src = "script.js"></script>
+        <link rel ="stylesheet" href="Assets/style.css">
+        
+        
         <title>Code Quiz</title>
     </head>
     <body>
-
-
-
-
+        <div id = "highScores">
+            <a href = "quiz.html">View High Scores</a>
+        </div>
+        <div id = "container" >
+            <div class = "row justify-content-center"> 
+                <div class = "col-sm">
+                    <h1 id = "title" style = "text-align: center;">Coding Quiz Challenge </h1>
+                    <h2 id = "prompt">Welcome to the coding quiz challenge! When you click the button below a series of questions will appear
+                        and you will have to respond to them as quickly as possible. If you answer a question incorrectly 5 points will be subtracted
+                        from your  score. If you answer a question correctly then 5 points will be added to your  score. Once all of the questions 
+                        have been answered, the remaining time left on the quiz will be added to your score and that will be the final score. Good Luck!
+                    </h2>
+                </div>
+            </div>
+            <br>
+            <div class = "row justify-content-center"> 
+                <div class = "col-sm">
+                    <button id = "go" onclick="start()">Start Quiz</button>
+                    <div id = "option-list">
+                    </div>
+                    <div id = "verify" class = "font-weight-lighter" ></div>
+                </div>
+            </div>
+        </div>
+        <!-- link to javascript file -->
+        <script src = "script.js"></script>
     </body>
 
 </html>

@@ -1,0 +1,11 @@
+#questions{
+    margin: auto;
+    width: 560px;
+}
+.col-sm{
+    max-width: 50%;
+    width: 50%;
+}
+#go{
+    margin:auto;
+}

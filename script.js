@@ -1,11 +1,11 @@
 // prewritten document short cuts
-
-var options = document.querySelector("#option-list");
-var go = document.querySelector("#go");
-var welcomeMessage = document.querySelector("#prompt");
-var title = document.querySelector("#title");
-// this is a presaved prompt messsage for when the user goes inbetween the actual quiz, leader board and the welcome page
-var MessageText = "Welcome to the coding quiz challenge! When you click the button below a series of questions will appear"+
+$(document).ready(function() {
+    var options = document.querySelector("#option-list");
+    var go = document.querySelector("#go");
+    var welcomeMessage = document.querySelector("#prompt");
+    var title = document.querySelector("#title");
+    // this is a presaved prompt messsage for when the user goes inbetween the actual quiz, leader board and the welcome page
+    var MessageText = "Welcome to the coding quiz challenge! When you click the button below a series of questions will appear"+
 "and you will have to respond to them as quickly as possible. If you answer a question incorrectly 5 points will be subtracted"+
 "from your  score. If you answer a question correctly then 5 points will be added to your  score. Once all of the questions "+
 "have been answered, the remaining time left on the quiz will be added to your score and that will be the final score. Good Luck!"
@@ -27,6 +27,11 @@ var questionArray =[];
 // characteristics of this function is it initiates the timer in the top right corner
 // It hides the Welcome screen
 // Runs the function that generates the display of the questions
+
+// 
+
+
+});
 function start(){
     go.style.display = "none";
     welcomeMessage.style.display = "none"; 
@@ -44,7 +49,7 @@ function start(){
     createQuestionBoard();
 
 }
-// 
+
 function createQuestionBoard(){
     // checks which question number we are on which is kept track on in var count
     if(count ===5){
@@ -63,9 +68,9 @@ function createQuestionBoard(){
     ans3.setAttribute("class", "alert alert-primary")
 
     if(questionArray[count].index === 0){
-        ans1.setAttribute("onclick", "correct()")
-        ans2.setAttribute("onclick", "incorrect()")
-        ans3.setAttribute("onclick", "incorrect()")
+        ans1.setAttribute("id", "correct")
+        ans2.setAttribute("id", "incorrect1")
+        ans3.setAttribute("id", "incorrect2")
     }
     if(questionArray[count].index === 1){
         ans1.setAttribute("onclick", "incorrect()")
@@ -77,15 +82,18 @@ function createQuestionBoard(){
         ans2.setAttribute("onclick", "incorrect()")
         ans3.setAttribute("onclick", "correct()")
     }
+    br = document.createElement("br");
     options.appendChild(ans1);
+    options.appendChild(br)
     options.appendChild(ans2);
+    options.appendChild(br)
     options.appendChild(ans3);
     
 }
 
 // When the correct answer is selected this function will run to add points to the score and append a message
 function correct(){
-    document.getElementById("#verify").textContent = "Correct";
+    document.querySelector("#verify").textContent = "Incorrect"; 
     score+= 5;
     count++;
     if(count!==5){
@@ -94,7 +102,7 @@ function correct(){
     if(count===5){
         endGame()
     }
-    
+    $("#options-list").empty();
 }
 // When the incorrect answer is selected this function will run to add points to the score and append a message
 function incorrect(){
@@ -107,6 +115,7 @@ function incorrect(){
     if(count===5){
         endGame()
     }
+    $("#options-list").empty();
 }
 
 function endGame(){
@@ -114,5 +123,3 @@ function endGame(){
     questionArray = [];
 
 }
-
-

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    $("#buttons").hide();
     // When the start button is clicked this function runs
     // characteristics of this function is it initiates the timer in the top right corner
     // It hides the Welcome screen
@@ -21,7 +22,11 @@ $(document).ready(function() {
         createQuestionBoard();
 
     });
-    
+    $("#redirect").on("click", function (){
+        constructLeaderboard();
+        $("#go").hide();
+        $("#buttons").show();
+    });
 });
 
 
@@ -95,6 +100,50 @@ function checkAnswer(verify){
     }
 }
 
+
+
+
+function constructLeaderboard(){
+    // change title to highscores
+    title.textContent = "High Scores";
+    welcomeMessage.textContent = "";
+    // new array to hold players assorted by score
+    var organizedPlayers = [];
+    // runs through the players array and sees who has the highest score value
+    console.log(players);
+    if(players.length>=1){
+        while(players.length !==0){
+            if(players.length===1){
+                organizedPlayers.push(players[0]);
+                players.splice(0,1);
+                break;
+            }
+            var highestScore = players[0].score
+            var topDog = players[0].name
+            var index= 0;
+            for(var i=0;i <players.length; i++){
+                if(players[i].score>highestScore){
+                    highestScore = players[i].score;
+                    topDog = players[i].name
+                    index = i;
+                }
+            }
+            organizedPlayers.push(players[index]);
+            players.splice(index,1);
+        }
+    }
+    players = organizedPlayers;
+    console.log(players);
+    for(var i = 0; i<players.length;i++ ){
+        var li = $("<li>")
+        li.text(players[i].name+ "       "+players[i].score);
+        $("#leaderBoard").append(li);
+    }
+
+}
+
+
+// When either time runs out or all questions are answered
 function endGame(){
     // clears the questionArray so it can be reshuffled when the game is reset
     // Refills master Array
@@ -106,31 +155,49 @@ function endGame(){
     console.log(finalScore);
     score = 0;
     title.textContent = "All Done!";
-    if(finalScore >=50){
-        welcomeMessage.textContent = "Wow awesome performance your final score of "+ finalScore +" was quite the performance to watch. To save this record on our leaderboards type in your name and hit submit below."
-    }
-    if(40<=finalScore <50){
-        welcomeMessage.textContent = "Good job! Your final score of "+ finalScore +" puts you at a decent placement. To save this record on our leaderboards type in your name and hit submit below."
-    }
-    if(30<=finalScore<40){
-        welcomeMessage.textContent = "Okay you're getting there, your final score of "+ finalScore +" isn't shameful but you can do better. To save this record on our leaderboards type in your name and hit submit below."
-
-    }
     if(finalScore<30){
         welcomeMessage.textContent = "Alright you might aswell try again, your final score of "+ finalScore +" is something that can be improved on. To save this record on our leaderboards type in your name and hit submit below."
 
     }
+    if(30<=finalScore<43){
+        welcomeMessage.textContent = "Okay you're getting there, your final score of "+ finalScore +" isn't shameful but you can do better. To save this record on our leaderboards type in your name and hit submit below."
+
+    }
+    if(43<=finalScore<50){
+        welcomeMessage.textContent = "Good job! Your final score of "+ finalScore +" puts you at a decent placement. To save this record on our leaderboards type in your name and hit submit below."
+    }
+   
+    if(finalScore >=50){
+        welcomeMessage.textContent = "Wow awesome performance! Your final score of "+ finalScore +" was quite the performance to watch. To save this record on our leaderboards type in your name and hit submit below."
+    }
+    
+    
     $("#option-list").empty();
     $("#verify").text("");
+    var form = $("<input type = 'text' id = 'player' placeholder = 'Name'>")
+    var submitButton = $("<button id = 'submitName' class = 'btn btn-primary'>Enter</button>")
+    $("#option-list").append(form);
+    $("#option-list").append(submitButton);
 }
 
+$("#submitName").on("click",function(){
+    $("#option-list").empty();
+    var playerName = $("#player").value();
+    var playerScore = finalScore;
+    var player= {
+        name: playerName,
+        score: playerScore
+    }
+    players.push(player);
+    constructLeaderboard();
+});
 
+// Timer Functions
 function startTimer(){
     totalSeconds = 60;
     $("#time-slot").text(totalSeconds);
     interval = setInterval(ourTimer,1000);
 }
-
 function ourTimer(){
     totalSeconds--;
     $("#time-slot").text(totalSeconds);
@@ -140,6 +207,7 @@ function ourTimer(){
     }
 
 }
+
 
 
 // GLOBAL VARIABLES
@@ -170,6 +238,13 @@ var finalScore =0;
 
 // Keeps track of which question they are on 
 var count;
+
+// Array that holds the players names for the leaderboard
+var players = [{name:"george",score:1},
+{name:"harry", score:5},
+{name:"royce",score:1000}
+
+];
 
 // used for timer function
 var totalSeconds;

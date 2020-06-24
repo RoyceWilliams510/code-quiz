@@ -1,5 +1,6 @@
 $(document).ready(function() {
     $("#buttons").hide();
+    $("#leaderBoard").hide();
     // When the start button is clicked this function runs
     // characteristics of this function is it initiates the timer in the top right corner
     // It hides the Welcome screen
@@ -20,13 +21,19 @@ $(document).ready(function() {
         console.log(masterArray);
 
         createQuestionBoard();
+        $("#time-slot").show();
+        $("#highScores").hide();
+
 
     });
     $("#redirect").on("click", function (){
         constructLeaderboard();
+        $("#leaderBoard").show()
         $("#go").hide();
         $("#buttons").show();
+        $("#highScores").hide();
     });
+    
 });
 
 
@@ -141,12 +148,47 @@ function constructLeaderboard(){
     }
 
 }
+// event listeners for the two buttons in the buttons div
 
+function enterName(){
+    var playerName = document.querySelector("#player").value;
+    $("#option-list").empty();
+    $("#buttons").show();
+    $("#highScores").hide();
+    var playerScore = finalScore;
+    var player= {
+        name: playerName,
+        score: playerScore
+    }
+    players.push(player);
+    constructLeaderboard();
+    $("#leaderBoard").show();
+
+}
+
+$("#clearer").on("click",function(){
+    players = [];
+    $("#leaderBoard").empty();
+    constructLeaderboard();
+});
+
+
+$("#goBack").on("click", function(){
+    $("#buttons").hide();
+    title.textContent ="Coding Quiz Challenge";
+    $("#go").show();
+    welcomeMessage.textContent = messageText;
+    $("#leaderBoard").hide();
+    $("#highScores").show();
+    $("#leaderBoard").empty();
+
+})
 
 // When either time runs out or all questions are answered
 function endGame(){
     // clears the questionArray so it can be reshuffled when the game is reset
     // Refills master Array
+   $("#time-slot").hide();
     masterArray = questionArray;
     questionArray = [];
     clearInterval(interval);
@@ -168,39 +210,29 @@ function endGame(){
     }
    
     if(finalScore >=50){
-        welcomeMessage.textContent = "Wow awesome performance! Your final score of "+ finalScore +" was quite the performance to watch. To save this record on our leaderboards type in your name and hit submit below."
+        welcomeMessage.textContent = "Wow you're a star! Your final score of "+ finalScore +" was quite the performance to watch. To save this record on our leaderboards type in your name and hit submit below."
     }
     
     
     $("#option-list").empty();
     $("#verify").text("");
     var form = $("<input type = 'text' id = 'player' placeholder = 'Name'>")
-    var submitButton = $("<button id = 'submitName' class = 'btn btn-primary'>Enter</button>")
+    var submitButton = $("<button id = 'submitName' class = 'btn btn-primary' onclick = 'enterName()'>Enter</button>")
     $("#option-list").append(form);
     $("#option-list").append(submitButton);
 }
 
-$("#submitName").on("click",function(){
-    $("#option-list").empty();
-    var playerName = $("#player").value();
-    var playerScore = finalScore;
-    var player= {
-        name: playerName,
-        score: playerScore
-    }
-    players.push(player);
-    constructLeaderboard();
-});
+
 
 // Timer Functions
 function startTimer(){
     totalSeconds = 60;
-    $("#time-slot").text(totalSeconds);
+    $("#time-slot").text("Time: "+totalSeconds);
     interval = setInterval(ourTimer,1000);
 }
 function ourTimer(){
     totalSeconds--;
-    $("#time-slot").text(totalSeconds);
+    $("#time-slot").text("Time: "+totalSeconds);
     if(totalSeconds===0){
         endGame();
         alert("Times up!");
@@ -215,7 +247,7 @@ function ourTimer(){
 
 // Each question is an object consisting of the question (which is a string), an array of promopts, and an integer correct which corresponds to the index of the correct answer
 var masterArray = [
-    {prompt: "Bootstrap is a _ which you can link to your HTML file to help style your page.", answers: ["CDN", "Language","Event listener"], index:1},
+    {prompt: "Bootstrap is a _ which you can link to your HTML file to help style your page.", answers: ["CDN", "Language","Event listener"], index:0},
     {prompt: "Local storage, geo location, and platform, are all elements that you can find by accessing the browser's __", answers: ["body", "cookies", "window/ DOM"], index:2},
     {prompt: "How do you properly access the last element in an array?", answers:["array.lastElement()","array[array.length-1]","array.lastIndexOf() "], index:1},
     {prompt: "The 'trinity' of clientside coding is considered to be HTML, CSS and ___", answers: ["Javascript", "Bootstrap", "Jquery"], index:0},
@@ -228,7 +260,7 @@ var score =0;
 var count;
 
 // this is a presaved prompt messsage for when the user goes inbetween the actual quiz, leader board and the welcome page
-var MessageText = "Welcome to the coding quiz challenge! When you click the button below a series of questions will appear"+
+var messageText = "Welcome to the coding quiz challenge! When you click the button below a series of questions will appear"+
 "and you will have to respond to them as quickly as possible. If you answer a question incorrectly 5 points will be subtracted"+
 "from your  score. If you answer a question correctly then 5 points will be added to your  score. Once all of the questions "+
 "have been answered, the remaining time left on the quiz will be added to your score and that will be the final score. Good Luck!"
